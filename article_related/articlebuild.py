@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
 import os
 
 from article_related.article import article
 from config.config import readpathdir
 from docx import Document
+from input.block_divide import blockdivide
 from input.readsentences import zykeywordextract, menuextract
 from input.rwsinput import rws
 
@@ -23,11 +25,13 @@ def article_build():
         articlelist.append(x)
     #rws build
     for a in articlelist:
-        a.setrws(rws(a.getparagraphs(),a.getname()))#ÈÎÎñÊé
-        res=zykeywordextract(a.getparagraphs(),a)#ÕªÒªºÍ¹Ø¼ü´Ê
+        a.setrws(rws(a.getparagraphs(),a.getname()))#ä»»åŠ¡ä¹¦
+        res=zykeywordextract(a.getparagraphs(),a)#æ‘˜è¦å’Œå…³é”®è¯
         a.setzy(res[0])
         a.setkeyword(res[1])
-        a.setmenu(menuextract(a.getparagraphs(),a))#Ä¿Â¼
+        a.setmenu(menuextract(a.getparagraphs(),a))#ç›®å½•
+        a.setblocks(blockdivide(a))
     return articlelist
 articlelist=article_build()
+blockdivide(articlelist[3])
 m=1

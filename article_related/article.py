@@ -32,3 +32,9 @@ class article:
         self.paragraphs=paragraphs
     def getparagraphs(self):
         return self.paragraphs
+
+    def getblocks(self):
+        return self.blocks
+    def setblocks(self,blocks):
+        self.blocks=blocks
+
