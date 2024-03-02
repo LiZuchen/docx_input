@@ -33,5 +33,5 @@ def article_build():
         a.setblocks(blockdivide(a))
     return articlelist
 articlelist=article_build()
-blockdivide(articlelist[3])
-m=1
+# blockdivide(articlelist[3])
+# m=1
