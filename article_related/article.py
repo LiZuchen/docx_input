@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class article:
     def __int__(self, name, paragraphs):
         self.name=name
@@ -27,7 +28,10 @@ class article:
         self.menu=menu
     def getmenu(self):
         return self.menu
-
+    def menucheck(self):
+        for m in self.menu:
+            if len(m[0])>40:
+                print("in menucheck 存在>40的标题",m[0])
     def setparagraphs(self,paragraphs):
         self.paragraphs=paragraphs
     def getparagraphs(self):

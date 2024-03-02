@@ -50,7 +50,8 @@ def menuout(path,text):
         print(text,file=f)
 def menuextract(paragraphs,a):
     menu_console_out=0
-    print("in ",a.getname()," menuextract")
+    if menu_console_out == 1:
+        print("in ",a.getname()," menuextract")
     i=0
     menutext=[]
     for paragraph in paragraphs:
@@ -60,13 +61,16 @@ def menuextract(paragraphs,a):
             menutext.append([paragraph.text, paragraph.style.name,i])
         i += 1
     menuout('D:\PyProject\docx_input\menu_out_files\\'+a.getname()+'.txt',menutext)
-    print(a.getname(), "menuextract end")
+    if menu_console_out == 1:
+        print(a.getname(), "menuextract end")
     return menutext
     # print(list(filter(None,re.split('\t| ',p.text))))
 
 def zykeywordextract(paragraphs,article):
     name=article.getname()
-    print(article.getname() + '摘要和关键词打印开始-----------------')
+    zykey_console_out=0
+    if zykey_console_out == 1:
+        print(article.getname() + '摘要和关键词打印开始-----------------')
     pi=0#段落index
     fzyi=0#目标index
     for i in paragraphs:
@@ -74,21 +78,22 @@ def zykeywordextract(paragraphs,article):
         pi+=1#pi指向下一个段落
         if len(xi)>=1 and xi[0]=='摘要':
 
-            print(xi[0])
+            # print(xi[0])
             fzyi=pi
         elif len(xi)>=2 and xi[0]=='摘' and xi[1]=='要':
 
-            print(xi[0])
-            print(xi[1])
+            # print(xi[0])
+            # print(xi[1])
             fzyi = pi
         if len(xi)>=1and len(xi[0]) >= 3 and xi[0][0:3] == '关键词':
-            print(xi[0])
+            # print(xi[0])
             break
     zytext=[]
     keywordtext=[]
     for pit in paragraphs[fzyi:pi-1]:
             #每个pit.text为摘要中的一段话
-        print(pit.text)
+        if zykey_console_out == 1:
+            print(pit.text)
         zytext.append(pit.text)
     try :
         keywordstr=paragraphs[pi-1].text.split('：')[1]
@@ -108,12 +113,11 @@ def zykeywordextract(paragraphs,article):
 
     zyout('D:\PyProject\docx_input\zy_output_files\\'+name+'.txt',zytext)
     zyout('D:\PyProject\docx_input\keyword_output_files\\'+name+'.txt',keywordtext)
-    print(article.getname()+'摘要和关键词打印结束-----------------')
+    if zykey_console_out == 1:
+        print(article.getname()+'摘要和关键词打印结束-----------------')
     return zytext,keywordtext
 #---------------------摘要和关键词打印结束-----------------------------------------------
-print('---------------------摘要和关键词打印结束-----------------')
 
-print('---------------------目录打印开始-----------------')
 
 # files=os.listdir(config.config.readpathdir)
 # for file in files:

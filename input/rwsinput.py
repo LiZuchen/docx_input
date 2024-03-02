@@ -53,21 +53,24 @@ def rws(paragraphs,name):
     rws4out=rws4clean(list(filter(None,rws4out)))
     rwslist.append(list(filter(None,rws4out)))#主要参考资料
 
-    print("-------------------------------")
-    for rwsi in rwslist:
-        print(rwsi)
-    print("-------------------------------")
+    rws_console_out=0
+    if rws_console_out:
+        print("-------------------------------")
+        for rwsi in rwslist:
+            print(rwsi)
+        print("-------------------------------")
     rwsout("D:\PyProject\docx_input\\rws_output_files\\"+name+'.txt',rwslist)
     return rwslist
 
 def rwsbuild():
     files=os.listdir(config.config.readpathdir)
     for file in files:
+
         print(file)
         file_path=os.path.join(config.config.readpathdir,file)
         doc = Document(file_path)
-        print(file_path)
-        print(len(doc.paragraphs))
+        # print(file_path)
+        # print(len(doc.paragraphs))
     # 输出的是列表，列表中一共有421份内容
     # [<docx.text.paragraph.Paragraph object at 0x000001906641C100>,...
     # <docx.text.paragrap h.Paragraph object at 0x000001906643C940>]

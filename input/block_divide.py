@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 def blockdivide(a):
-    print(a.getname())
+    # print(a.getname())
     blocks=[]
     hdnum=[]
     #menuitem===>text ,heading x, pi
@@ -17,6 +17,6 @@ def blockdivide(a):
             for i in a.getparagraphs()[hdnum[num]:len(a.getparagraphs())]:
                 # print(i.text)
                 blocklist.append(i.text)
-        print("----------------------------------------------------------------------")
+        # print("----------------------------------------------------------------------")
         blocks.append([a.getmenu()[num][0],a.getmenu()[num][1],a.getmenu()[num][2],blocklist])
     return blocks

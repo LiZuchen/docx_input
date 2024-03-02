@@ -16,8 +16,8 @@ def article_build():
         print(file)
         file_path = os.path.join(readpathdir, file)
         doc = Document(file_path)
-        print(file_path)
-        print(len(doc.paragraphs))
+        # print(file_path)
+        # print(len(doc.paragraphs))
         name = file.split('.')[0]
         x=article()
         x.setname(name)
@@ -31,7 +31,9 @@ def article_build():
         a.setkeyword(res[1])
         a.setmenu(menuextract(a.getparagraphs(),a))#目录
         a.setblocks(blockdivide(a))
+        a.menucheck()
     return articlelist
 articlelist=article_build()
+
 # blockdivide(articlelist[3])
 # m=1
