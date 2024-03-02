@@ -1,2 +1,5 @@
-readsample=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据\16021088_张文煊_基于实体链接和关系抽取的文本知识提取算法研究（最终版）.docx'
+readsample1= r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据\16021088_张文煊_基于实体链接和关系抽取的文本知识提取算法研究（最终版）.docx'
 readpathdir=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据'
+
+readsample2=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据\17231143_代雪琪_基于Slurm的HPC集群资源监控可视化与分析.docx'
+readsample3=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据\16071013_叶思远_基于特征不确定性建模的异视角相机定位算法研究与实现（最终版）.docx'

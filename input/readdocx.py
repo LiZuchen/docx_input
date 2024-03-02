@@ -58,7 +58,7 @@ def rws(paragraphs,name):
         print(rwsi)
     print("-------------------------------")
     rwsout("D:\PyProject\docx_input\\rws_output_files\\"+name+'.txt',rwslist)
-path = config.config.readpath
+
 files=os.listdir(config.config.readpathdir)
 for file in files:
     print(file)
