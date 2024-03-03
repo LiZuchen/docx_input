@@ -32,8 +32,12 @@ def article_build():
         a.setmenu(menuextract(a.getparagraphs(),a))#目录
         a.setblocks(blockdivide(a))
         a.menucheck()
+        a.blockstocsv()
+        a.calppl()
     return articlelist
 articlelist=article_build()
-
+# articlelist[0].blockstocsv()
+# articlelist[0].calppl()
 # blockdivide(articlelist[3])
-# m=1
+# articlelist[0].pplcheck()
+m=1
