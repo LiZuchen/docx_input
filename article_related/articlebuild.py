@@ -33,6 +33,7 @@ def article_build():
         a.setblocks(blockdivide(a))
         a.menucheck()
         a.blockstocsv()
+        a.tosents()
         a.calppl()
     return articlelist
 articlelist=article_build()

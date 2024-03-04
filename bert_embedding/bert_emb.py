@@ -186,11 +186,11 @@ def cal_ppl():
     print(ppl)
 
 from torch.nn import CrossEntropyLoss
-def cal_ppl_bygpt2(text,name):
+def cal_ppl_bygpt2(sents,name):
     # sens = ["今天是个好日子。", "天今子日。个是好", "这个婴儿有900000克呢。", "我不会忘记和你一起奋斗的时光。",
     #         "我不会记忘和你一起奋斗的时光。", "会我记忘和你斗起一奋的时光。","今天是个好日子,今天是个好日子,今天是个好日子,今天是个好日子"]
 
-    sens=text
+    sens=sents
     tokenizer = BertTokenizer.from_pretrained("D:\PyProject\docx_input\pretainedmodel\gpt2-chinese")
     model = GPT2LMHeadModel.from_pretrained("D:\PyProject\docx_input\pretainedmodel\gpt2-chinese")
     inputs = tokenizer(sens, padding='max_length', max_length=50, truncation=True, return_tensors="pt")

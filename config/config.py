@@ -4,9 +4,12 @@ readpathdir=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\
 readsample2=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据\17231143_代雪琪_基于Slurm的HPC集群资源监控可视化与分析.docx'
 readsample3=r'C:\Users\11858\Documents\毕设\毕设0\论文评价\论文评价\论文示例数据\16071013_叶思远_基于特征不确定性建模的异视角相机定位算法研究与实现（最终版）.docx'
 
-
-
+#---------------------blocktocsv-------------------------#
+blockstocsv_cache_on=1
 #---------------------------ppl---------------------------#
 ppl_distribution_draw=1
 ppl_cache_on=1
 ppl_len_check_on=1
+ppl_large_show=0
+#--------------------------sents--------------------------#
+sents_to_csv=0

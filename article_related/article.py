@@ -50,18 +50,19 @@ class article:
     def setblocks(self,blocks):
         self.blocks=blocks
     def blockstocsv(self):
-        label=[]
-        text=[]
-        for i in self.blocks:
-            labeli="_".join(i[0:2])+'_'+str(i[2])
-            for j in i[3]:
-                if j!='':
-                    text.append(j)
-                    label.append(labeli)
-        dataframe = pd.DataFrame({'label': label, 'text': text})
-        # 将DataFrame存储为csv,index表示是否显示行名，default=True
-        dataframe.to_csv(r'D:\PyProject\docx_input\blockcsv_out_files\\'+
-                         self.name+"_blocks.csv", index=False, sep=',')
+        if config.config.blockstocsv_cache_on==0:
+            label=[]
+            text=[]
+            for i in self.blocks:
+                labeli="_".join(i[0:2])+'_'+str(i[2])
+                for j in i[3]:
+                    if j!='':
+                        text.append(j)
+                        label.append(labeli)
+            dataframe = pd.DataFrame({'label': label, 'text': text})
+            # 将DataFrame存储为csv,index表示是否显示行名，default=True
+            dataframe.to_csv(r'D:\PyProject\docx_input\blockcsv_out_files\\'+
+                             self.name+"_blocks.csv", index=False, sep=',')
 
     def setppllist(self, ppllist):
         self.ppllist = ppllist
@@ -80,7 +81,7 @@ class article:
             floatlist=list(map(float,strlist))
             self.setppllist(floatlist)
         if ppl_len_check_on:
-            if len(self.ppllist) == len(self.text) :
+            if len(self.ppllist) == len(self.sents) :
                 print("ppl check text ppllist len equal")
             else:
                 print("ppl check text ppllist len not equal!")
@@ -103,9 +104,12 @@ class article:
             elif i >= 100 and i < 500:
             # 5
                 y[4] += 1
+                if config.config.ppl_large_show ==1:
+                    print('100-500', ' in ',self.name," ",self.sents[sum(y) - 1])
             elif i>=500 and i<1000:
             # 6
                 y[5] += 1
+                print('500-1000',self.sents[sum(y)-1])
             elif i>=1000 and i<2000:
             # 7
                 y[6] += 1
@@ -128,11 +132,30 @@ class article:
         self.text=text
     def calppl(self):
         self.totext()
+        #以后可能在计算没用
         if config.config.ppl_cache_on:
            self.pplcheck()
         else:
-            self.setppllist(cal_ppl_bygpt2(self.text,self.name))
+            self.setppllist(cal_ppl_bygpt2(self.sents,self.name))
             self.pplcheck()
+    def tosents(self):
+        sents_to_csv=config.config.sents_to_csv
+        sents=[]
+        for i in self.blocks:
+            # labeli = "_".join(i[0:2]) + '_' + str(i[2])
+            for j in i[3]:
+                if j != ''and j[len(j)-1]=='。':
+                    sentsi=list(j.split('。'))
+                    for i in sentsi:
+                        if len(i)>=1:
+                            sents.append(i+'。')
+        self.sents=sents
+
+        if sents_to_csv:
+            dataframe = pd.DataFrame({ 'sents': sents})
+            # 将DataFrame存储为csv,index表示是否显示行名，default=True
+            dataframe.to_csv(r'D:\PyProject\docx_input\sents_out_files\\' +
+                             self.name + "_sents.csv", index=False, sep=',')
 
 
 
