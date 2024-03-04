@@ -9,8 +9,13 @@ blockstocsv_cache_on=1
 #---------------------------ppl---------------------------#
 ppl_distribution_draw=1
 ppl_cache_on=1
-ppl_len_check_on=1
+ppl_len_check_on=0
 ppl_large_show=0
 #--------------------------sents--------------------------#
 sents_to_csv=0
-sents_sim_cache_on=0
+sents_sim_cache_on=1
+
+
+#--------------------------task1--------------------------#
+paragraphs_statistics_show_on=1
+sentences_statistics_show_on=1

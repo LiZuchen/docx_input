@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import torch
 import torchvision
 import torchaudio
@@ -245,10 +246,22 @@ def cal_sim_bybert(sentswithlabel,name):
                 sentssim.append([sentswithlabel[key][i],sentswithlabel[key][j],calc_similarity(sentswithlabel[key][i],sentswithlabel[key][j])])
                     # print(sentssim[-1],sentswithlabel[key][i],sentswithlabel[key][j])
     # print(sentssim[-1], sentswithlabel[key][i], sentswithlabel[key][j])
-    sentssimpath = r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\'
-    with open(sentssimpath + name + '.txt', 'w') as f:
-        print(sentssim, file=f)
+    # sentssimpath = r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\'
+    # with open(sentssimpath + name + '.txt', 'w') as f:
+    #     print(sentssim, file=f)
     print(2)
+    sents1=[]
+    sents2=[]
+    sim=[]
+    for i in sentssim:
+        sents1.append(i[0])
+        sents2.append(i[1])
+        sim.append(i[2])
+    dataframe = pd.DataFrame({'sents1': sents1,'sents2': sents2,'sim':sim})
+    # 将DataFrame存储为csv,index表示是否显示行名，default=True
+    dataframe.to_csv(r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\' +
+                     name + "sents_sim.csv", index=False, sep=',')
+
     return sentssim
 
 

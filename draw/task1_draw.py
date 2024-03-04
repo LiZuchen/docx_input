@@ -1,19 +1,22 @@
+# -*- coding: utf-8 -*-
 import matplotlib
 import matplotlib.pyplot as plt
+import seaborn
 from matplotlib.ticker import MultipleLocator
+from seaborn import jointplot
 
 
 def pplnum_drawbar(pplnum,name):
     matplotlib.use('TkAgg')
     n=len(pplnum)
-    x=[2,4,6,8,10,12,14,16]#È·¶¨Öù×´Í¼ÊıÁ¿,¿ÉÒÔÈÏÎªÊÇx·½Ïò¿Ì¶È
+    x=[2,4,6,8,10,12,14,16]#ç¡®å®šæŸ±çŠ¶å›¾æ•°é‡,å¯ä»¥è®¤ä¸ºæ˜¯xæ–¹å‘åˆ»åº¦
 
-    y=pplnum#y·½Ïò¿Ì¶È
+    y=pplnum#yæ–¹å‘åˆ»åº¦
 
     color=['green','yellow','orange','brown','red','purple','blue','black']
     x_label=['0-10','10-25','25-50','50-100','100-500','500-1000','1000-2000','>2000']
-    # plt.xticks(x, x_label)#»æÖÆx¿Ì¶È±êÇ©
-    # plt.bar(x, y,width=[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],bottom=0,color=color)#»æÖÆy¿Ì¶È±êÇ©
+    # plt.xticks(x, x_label)#ç»˜åˆ¶xåˆ»åº¦æ ‡ç­¾
+    # plt.bar(x, y,width=[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],bottom=0,color=color)#ç»˜åˆ¶yåˆ»åº¦æ ‡ç­¾
     # plt.legend()
     # plt.grid(True, linestyle=':', color='r', alpha=0.6)
     # plt.show()
@@ -33,5 +36,17 @@ def pplnum_drawbar(pplnum,name):
     figpath='D:\PyProject\docx_input\data_cache\ppl_distribution_figure'
     plt.savefig(figpath+'\\'+name+'.png')
     # plt.show()
+    plt.close()
+    #è®¾ç½®ç½‘æ ¼åˆ»åº¦
+def draw_x_y_distribution(x,y,name):
+    matplotlib.use('TkAgg')
 
-    #ÉèÖÃÍø¸ñ¿Ì¶È
+    with seaborn.axes_style("white"):
+        # fig, ax = plt.subplots(figsize=(20, 20))
+        # åˆ›å»ºä¸€ä¸ªå…­è¾¹å½¢èœ‚çªå›¾è”åˆå›¾
+        jointplot(x=x, y=y, kind="hex").set_axis_labels(
+            xlabel="æ®µè½å¥å­æ•°åˆ†å¸ƒ", ylabel="æ®µè½é•¿åº¦åˆ†å¸ƒ", fontproperties='STsong')
+    plt.tight_layout()
+    figpath = 'D:\PyProject\docx_input\data_cache\paragraphs_distribution'
+    plt.savefig(figpath + '\\' + name +'paragraphs__distribution_figure' +'.png')
+    # plt.show()
