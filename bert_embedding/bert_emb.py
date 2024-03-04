@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torchvision
 import torchaudio
+from config.config import sents_sim_cache_on
 from torch import nn
 from transformers import BertTokenizer, BertForMaskedLM, GPT2LMHeadModel
 import transformers
@@ -212,6 +213,45 @@ def cal_ppl_bygpt2(sents,name):
     return ppl
 
 
+from transformers import AutoTokenizer, AutoModel
+import numpy as np
+# 加载BERT模型和分词器
+# 定义计算相似度的函数
+def calc_similarity(s1, s2):
+    # 对句子进行分词，并添加特殊标记
+    tokenizer = AutoTokenizer.from_pretrained("bert-base-chinese")
+    model = AutoModel.from_pretrained("bert-base-chinese")
+    inputs = tokenizer([s1, s2], return_tensors='pt', padding=True, truncation=True)
 
+    # 将输入传递给BERT模型，并获取输出
+    with torch.no_grad():
+        outputs = model(**inputs)
+        embeddings = outputs.last_hidden_state[:, 0, :].cpu().numpy()
+
+    # 计算余弦相似度，并返回结果
+    sim = np.dot(embeddings[0], embeddings[1]) / (np.linalg.norm(embeddings[0]) * np.linalg.norm(embeddings[1]))
+    # print("相似度",sim)
+    return sim
+# 测试函数
+# similarity = calc_similarity(s1, s2)
+def cal_sim_bybert(sentswithlabel,name):
+    print(1)
+    sentssim=[]
+    for key in sentswithlabel.keys():
+        for i in range(0,len(sentswithlabel[key])):
+            if  i<len(sentswithlabel[key])-1 :
+            # for j in range(i+1,len(sentswithlabel[key])):
+                j=i+1
+                sentssim.append([sentswithlabel[key][i],sentswithlabel[key][j],calc_similarity(sentswithlabel[key][i],sentswithlabel[key][j])])
+                    # print(sentssim[-1],sentswithlabel[key][i],sentswithlabel[key][j])
+    # print(sentssim[-1], sentswithlabel[key][i], sentswithlabel[key][j])
+    sentssimpath = r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\'
+    with open(sentssimpath + name + '.txt', 'w') as f:
+        print(sentssim, file=f)
+    print(2)
+    return sentssim
+
+
+# print(f"相似度：{similarity:.4f}")
 # embedding()
 # cal_ppl_bygpt2()

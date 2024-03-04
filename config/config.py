@@ -13,3 +13,4 @@ ppl_len_check_on=1
 ppl_large_show=0
 #--------------------------sents--------------------------#
 sents_to_csv=0
+sents_sim_cache_on=0

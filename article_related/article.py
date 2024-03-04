@@ -3,7 +3,7 @@ import re
 
 import config.config
 import pandas as pd
-from bert_embedding.bert_emb import cal_ppl_bygpt2
+from bert_embedding.bert_emb import cal_ppl_bygpt2, cal_sim_bybert
 from draw.ppldraw import pplnum_drawbar
 
 
@@ -138,24 +138,52 @@ class article:
         else:
             self.setppllist(cal_ppl_bygpt2(self.sents,self.name))
             self.pplcheck()
+
+    def cal_sents_sim(self):
+
+        if config.config.sents_sim_cache_on:
+            filepath = r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\' + self.name + '.txt'
+            with open(filepath, "r", encoding='gbk') as f:  # 打开文件
+                data = f.read()  # 读取文件
+                    # print(data)
+                strlist = list(filter(None, re.split(' |,|\[|]|\n', data)))
+
+            self.sents_sim_check()
+        else:
+            self.setsents_sim(cal_sim_bybert(self.sentswithlabel,self.name))
+            self.sents_sim_check()
+    def sents_sim_check(self):
+        return
     def tosents(self):
         sents_to_csv=config.config.sents_to_csv
         sents=[]
+        sentswithlabel=dict()
+        #block(内涵多个paragraps)
+        #paragraph内涵多个sentences
         for i in self.blocks:
             # labeli = "_".join(i[0:2]) + '_' + str(i[2])
             for j in i[3]:
                 if j != ''and j[len(j)-1]=='。':
                     sentsi=list(j.split('。'))
-                    for i in sentsi:
-                        if len(i)>=1:
-                            sents.append(i+'。')
+                    for k in sentsi:
+                        if len(k)>=1:
+                            sents.append(k+'。')
+                            if sentswithlabel.get(i[2])!=None:
+                                sentswithlabel.get(i[2]).append(k+'。')
+                            else:
+                                sentswithlabel[i[2]]=[k+'。']
+
         self.sents=sents
+        self.sentswithlabel= sentswithlabel
 
         if sents_to_csv:
             dataframe = pd.DataFrame({ 'sents': sents})
             # 将DataFrame存储为csv,index表示是否显示行名，default=True
             dataframe.to_csv(r'D:\PyProject\docx_input\sents_out_files\\' +
                              self.name + "_sents.csv", index=False, sep=',')
+
+    def setsents_sim(self, param):
+        self.sents_sim=param
 
 
 

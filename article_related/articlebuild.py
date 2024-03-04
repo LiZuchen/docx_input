@@ -35,6 +35,7 @@ def article_build():
         a.blockstocsv()
         a.tosents()
         a.calppl()
+        a.cal_sents_sim()
     return articlelist
 articlelist=article_build()
 # articlelist[0].blockstocsv()
