@@ -19,3 +19,4 @@ sents_sim_cache_on=1
 #--------------------------task1--------------------------#
 paragraphs_statistics_show_on=1
 sentences_statistics_show_on=1
+task1_3_draw_on=0

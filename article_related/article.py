@@ -239,7 +239,8 @@ class article:
             print('平均每段的字长',average_wordssnum_per_paragraph)
             print('每段的句子数目',paragraphslennum)
             print('每段的长度', paragraphslens)
-        draw.task1_draw.draw_x_y_distribution(paragraphslennum,paragraphslens,self.name)
+        if task1_3_draw_on:
+            draw.task1_draw.draw_x_y_distribution(paragraphslennum,paragraphslens,self.name)
 
 
 

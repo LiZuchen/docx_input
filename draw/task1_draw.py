@@ -40,7 +40,6 @@ def pplnum_drawbar(pplnum,name):
     #设置网格刻度
 def draw_x_y_distribution(x,y,name):
     matplotlib.use('TkAgg')
-
     with seaborn.axes_style("white"):
         # fig, ax = plt.subplots(figsize=(20, 20))
         # 创建一个六边形蜂窝图联合图
