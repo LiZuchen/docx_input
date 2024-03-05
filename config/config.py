@@ -12,11 +12,11 @@ ppl_cache_on=1
 ppl_len_check_on=0
 ppl_large_show=0
 #--------------------------sents--------------------------#
-sents_to_csv=0
+# sents_to_csv=1
 sents_sim_cache_on=1
-
-
+sents_cache_on=1
+sents_sim_check_on=0
 #--------------------------task1--------------------------#
-paragraphs_statistics_show_on=1
-sentences_statistics_show_on=1
+paragraphs_statistics_show_on=0
+sentences_statistics_show_on=0
 task1_3_draw_on=0

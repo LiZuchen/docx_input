@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import time
 
 from article_related.article import article
 from config.config import readpathdir
@@ -19,9 +20,9 @@ def article_build():
         # print(file_path)
         # print(len(doc.paragraphs))
         name = file.split('.')[0]
-        x=article()
-        x.setname(name)
-        x.setparagraphs(doc.paragraphs)
+        x=article(name,doc.paragraphs)
+        # x.setname(name)
+        # x.setparagraphs(doc.paragraphs)
         articlelist.append(x)
     #rws build
     for a in articlelist:
@@ -30,14 +31,17 @@ def article_build():
         a.setzy(res[0])
         a.setkeyword(res[1])
         a.setmenu(menuextract(a.getparagraphs(),a))#目录
-        a.setblocks(blockdivide(a))
-        a.menucheck()
-        a.blockstocsv()
-        a.tosents()
-        a.calppl()
-        a.cal_sents_sim()
+        a.setblocks(blockdivide(a))#按目录分块
+        a.menucheck()#目录检测
+        a.blockstocsv()#保存块
+        a.tosents()#生成句子（如果已有，则直接读取填充）
+        a.calppl()#计算ppl，如果已经计算，则直接填充
+        a.cal_sents_sim()#计算句子上下句相似度，如果已经计算，则直接填充
+        a.getref()
     return articlelist
+bgtime=time.time()
 articlelist=article_build()
+print('article_build() 用时： ',time.time()-bgtime,' s')
 # articlelist[0].blockstocsv()
 # articlelist[0].calppl()
 # blockdivide(articlelist[3])

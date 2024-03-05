@@ -7,13 +7,15 @@ import matplotlib
 import pandas as pd
 import seaborn
 import sns as sns
+from article_related.reference import reference
 from bert_embedding.bert_emb import cal_ppl_bygpt2, cal_sim_bybert
 from draw.task1_draw import pplnum_drawbar
+import pickle
 from sympy import stats
 import matplotlib.pyplot as plt
 
 class article:
-    def __int__(self, name, paragraphs):
+    def __init__(self, name, paragraphs):
         self.name=name
         self.paragraphs=paragraphs
 
@@ -159,7 +161,8 @@ class article:
         else:
             self.setsents_sim(cal_sim_bybert(self.sentswithlabel,self.name))
 
-        self.sents_sim_check()
+        if config.config.sents_sim_check_on:
+            self.sents_sim_check()
     def sents_sim_check(self):
         for i in self.sents_sim:
             # print(i)
@@ -169,35 +172,63 @@ class article:
                 print(i)
         return
     def tosents(self):
-        sents_to_csv=config.config.sents_to_csv
-        sents=[]
-        sentswithlabel=dict()
-        #block(内涵多个paragraps)
-        #paragraph内涵多个sentences
-        for i in self.blocks:
-            # labeli = "_".join(i[0:2]) + '_' + str(i[2])
-            # print(i[0:3])
-            for j in i[3]:
-                if j != ''and j[len(j)-1]=='。':
-                    sentsi=list(j.split('。'))
-                    for k in sentsi:
-                        if len(k)>=1:
-                            sents.append(k+'。')
-                            if sentswithlabel.get(i[2])!=None:
-                                sentswithlabel.get(i[2]).append(k+'。')
-                            else:
-                                sentswithlabel[i[2]]=[k+'。']
-
-        self.sents=sents
-        self.sentswithlabel= sentswithlabel
-
-        self.sents_statistics()
-        self.paragraphs_statistics()
-        if sents_to_csv:
-            dataframe = pd.DataFrame({ 'sents': sents})
+        # sents_to_csv=config.config.sents_to_csv
+        if config.config.sents_cache_on ==0:
+            sents=[]
+            sentswithlabel=dict()
+            #block(内涵多个paragraps)
+            #paragraph内涵多个sentences
+            for i in self.blocks:
+                # labeli = "_".join(i[0:2]) + '_' + str(i[2])
+                # print(i[0:3])
+                for j in i[3]:
+                    if j != ''and j[len(j)-1]=='。':
+                        sentsi=list(j.split('。'))
+                        for k in sentsi:
+                            if len(k)>=1:
+                                sents.append(k+'。')
+                                if sentswithlabel.get(i[2])!=None:
+                                    sentswithlabel.get(i[2]).append(k+'。')
+                                else:
+                                    sentswithlabel[i[2]]=[k+'。']
+            dataframe = pd.DataFrame({'sents': sents})
             # 将DataFrame存储为csv,index表示是否显示行名，default=True
             dataframe.to_csv(r'D:\PyProject\docx_input\sents_out_files\\' +
                              self.name + "_sents.csv", index=False, sep=',')
+            self.sents = sents
+            with open(r'D:\PyProject\docx_input\sents_out_files\\' +
+                             self.name + "_sentswithlabel.pkl", "wb") as tf:
+                pickle.dump(sentswithlabel, tf)
+                tf.close()
+            # # 读取文件
+            # with open("myDictionary.pkl", "rb") as tf:
+            #     new_dict = pickle.load(tf)
+
+            # with open(r'D:\PyProject\docx_input\sents_out_files\\' +
+            #                  self.name + "_sentswithlabel.txt",'w') as f:
+            #     print(sentswithlabel,f)
+                self.sentswithlabel = sentswithlabel
+        else:
+            x=pd.read_csv(r'D:\PyProject\docx_input\sents_out_files\\' +
+                             self.name + "_sents.csv",sep=',')
+            self.sents = list(x['sents'])
+
+            with open(r'D:\PyProject\docx_input\sents_out_files\\' +
+                      self.name + "_sentswithlabel.pkl", "rb") as tf:
+                sentswithlabel=pickle.load(tf)
+
+
+            # with open(r'D:\PyProject\docx_input\sents_out_files\\' +
+            #                  self.name + "_sentswithlabel.txt", "r", encoding='gbk') as f:  # 打开文件
+            #     data = f.read()  # 读取文件
+                    # print(data)
+                self.sentswithlabel=sentswithlabel
+
+
+
+        self.sents_statistics()
+        self.paragraphs_statistics()
+
 
     def setsents_sim(self, param):
         self.sents_sim=param
@@ -214,7 +245,8 @@ class article:
             print(self.name,)
             print('平均句长',average_sentence_length)
             print('句长',sentslen)
-
+        self.average_sentence_length=average_sentence_length
+        self.sentslen=sentslen
     def paragraphs_statistics(self):
         #平均段内句子数
         average_sentsnum_per_paragraph=0
@@ -239,8 +271,40 @@ class article:
             print('平均每段的字长',average_wordssnum_per_paragraph)
             print('每段的句子数目',paragraphslennum)
             print('每段的长度', paragraphslens)
-        if task1_3_draw_on:
+        self.average_sentsnum_per_paragraph=average_sentsnum_per_paragraph
+        self.average_wordssnum_per_paragraph=average_wordssnum_per_paragraph
+        self.paragraphslennum=paragraphslennum
+        self.paragraphslens=paragraphslens
+        if config.config.task1_3_draw_on:
             draw.task1_draw.draw_x_y_distribution(paragraphslennum,paragraphslens,self.name)
+
+
+    def getref(self):
+        c=0
+        b=0
+        refs=[]
+        for i in self.text:
+            if i=='参考文献' and c==0:
+                c+=1
+                b=1
+                continue
+            elif i=='参考文献':
+                print('error in getref while processing article',self.name)
+            if c>=1 and b==1:
+                refi=reference(self,c,i)
+                refs.append(refi)
+                c+=1
+
+
+        # print(self.name)
+        # for i in refs:
+        #     print(i.encode('gbk','ignore').decode('gbk'))
+        self.refs=refs
+        for ref in self.refs:
+            ref.toTemplate()
+
+        # print(refs)
+
 
 
 
