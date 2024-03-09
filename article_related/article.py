@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-
+import os
 import config.config
 import draw.task1_draw
 import matplotlib
@@ -290,19 +290,51 @@ class article:
                 continue
             elif i=='参考文献':
                 print('error in getref while processing article',self.name)
+            if '.' not in i and b==1:
+                break
             if c>=1 and b==1:
                 refi=reference(self,c,i)
                 refs.append(refi)
                 c+=1
+        self.refs = refs
+        if self.refs[0].text[0] != '[':
+            x=1
+            for i in self.refs:
+                i.text='['+str(x)+']'+i.text
+                x+=1
 
-
-        # print(self.name)
-        # for i in refs:
-        #     print(i.encode('gbk','ignore').decode('gbk'))
-        self.refs=refs
+        # er_unicode=[]
+        fail = []
         for ref in self.refs:
-            ref.toTemplate()
+            key = ref.getusera()
+            ref.setkey(key)
+            if key == None:
+                fail.append(ref.text)
+        if 1==1:
+            filepath = r'D:\PyProject\docx_input\data_cache\refs\\' + self.name + '.txt'
+            for ref in self.refs:
+                if ref.key!=None:
+                    with open(filepath,'a',encoding='utf-8') as f:  # 打开文件
+                    # try:
+                        print(ref.text, file=f)
+                # except UnicodeEncodeError:
+                #     er_unicode.append(ref.text)
+                #     print(ref.text.encode('gbk','ignore').decode('gbk'), file=f)
 
+        in_path=r'D:\PyProject\docx_input\data_cache\refs\\' + self.name + '.txt'
+        out_path=r'D:\PyProject\docx_input\data_cache\refs_bibtex\\' + self.name + '.bib'
+        os.system('perl "d:\PyProject\docx_input\gb7714\gb7714texttobib.pl" in='+in_path+' out='+out_path)
+
+
+
+        with open(r'D:\PyProject\docx_input\data_cache\refs_fail\\' + self.name + '_nokey.txt', 'w', encoding='utf-8') as f:  # 打开文件
+            # try:
+            print(fail, file=f)
+        #     if y==True:
+        #         pass
+        #     else:
+        #         print('error in ',self.name,' ',ref.text)
+        #         pass
         # print(refs)
 
 
