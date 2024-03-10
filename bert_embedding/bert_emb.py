@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 import numpy as np
 import pandas as pd
 import torch
@@ -268,3 +270,43 @@ def cal_sim_bybert(sentswithlabel,name):
 # print(f"相似度：{similarity:.4f}")
 # embedding()
 # cal_ppl_bygpt2()
+def cal_ppl_bygpt2_4gpt_gen(sents,name):
+    sens = sents
+    tokenizer = BertTokenizer.from_pretrained("D:\PyProject\docx_input\pretainedmodel\gpt2-chinese")
+    model = GPT2LMHeadModel.from_pretrained("D:\PyProject\docx_input\pretainedmodel\gpt2-chinese")
+    inputs = tokenizer(sens, padding='max_length', max_length=50, truncation=True, return_tensors="pt")
+    bs, sl = inputs['input_ids'].size()
+    outputs = model(**inputs, labels=inputs['input_ids'])
+    logits = outputs[1]
+    # Shift so that tokens < n predict n
+    shift_logits = logits[:, :-1, :].contiguous()
+    shift_labels = inputs['input_ids'][:, 1:].contiguous()
+    shift_attentions = inputs['attention_mask'][:, 1:].contiguous()
+    # Flatten the tokens
+    loss_fct = CrossEntropyLoss(ignore_index=0, reduction="none")
+    loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1)).detach().reshape(bs, -1)
+    meanloss = loss.sum(1) / shift_attentions.sum(1)
+    ppl = torch.exp(meanloss).numpy().tolist()
+    pplpath = r'D:\PyProject\docx_input\chatgpt_gen_ppl\\'
+    with open(pplpath + name + '.txt', 'w') as f:
+        print(ppl, file=f)
+    return ppl
+def readgpt_gen():
+    files=os.listdir('D:\PyProject\docx_input\chatgpt_gen')
+    print(files)
+    name='研究背景'
+    file_path='D:\PyProject\docx_input\chatgpt_gen\\'+ name+'.txt'
+    with open (file_path,'r',encoding='utf-8') as f:
+        txt = []
+        for line in f:
+            txt.append(line.strip())
+        print(txt)
+    sents=[]
+    for i in txt:
+        linei=list(i.split('。'))
+        for j in linei:
+            if j!='':
+                sents.append(j+'。')
+    print(len(sents))
+    cal_ppl_bygpt2_4gpt_gen(sents,name)
+readgpt_gen()

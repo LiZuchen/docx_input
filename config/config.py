@@ -11,6 +11,7 @@ ppl_distribution_draw=1
 ppl_cache_on=1
 ppl_len_check_on=0
 ppl_large_show=0
+
 #--------------------------sents--------------------------#
 # sents_to_csv=1
 sents_sim_cache_on=1
@@ -20,3 +21,8 @@ sents_sim_check_on=0
 paragraphs_statistics_show_on=0
 sentences_statistics_show_on=0
 task1_3_draw_on=0
+
+
+#--------------------------task2--------------------------#
+ref_write_file_on=0
+refs_parse_cache_on=1

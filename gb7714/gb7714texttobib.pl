@@ -49,10 +49,14 @@ foreach $file(@ARGV){
 	if($file=~m/out=/){
 	($outfile)=($file=~m/out=(.*)/)
 	}
+	if($file=~m/log=/){
+	($logfile)=($file=~m/log=(.*)/)
+	}
 }
 
 open (FHR,"<$infile");
 open (FHW,">$outfile");
+open (FHL,">$logfile");
 print FHW '% Encoding: UTF-8',"\n";
 
 @references=<FHR>;#将所有的文献存为@references数组，各文献以<行>为单位进行区分
@@ -289,6 +293,7 @@ foreach $reference(@references){
 			if($flagmatched==0){
 				print 'the text after title was not matched, please add a regex for the current entry in the perl source code!',"\n";
 				print '当前条目标题之后的内容没有匹配的正则表达式，请在perl代码中增加适合该条目正则表达式!',"\n";
+			    print FHL "$reference",'当前条目标题之后的内容没有匹配的正则表达式，请在perl代码中增加适合该条目正则表达式!',"\n";
 			}
 			
 			print 'journal =',$journal,"\n";
@@ -376,6 +381,7 @@ foreach $reference(@references){
 			if($flagmatched==0){
 				print 'the text after title was not matched, please add a regex for the current entry in the perl source code!',"\n";
 				print '当前条目标题之后的内容没有匹配的正则表达式，请在perl代码中增加适合该条目正则表达式!',"\n";
+			    print FHL "$reference",'当前条目标题之后的内容没有匹配的正则表达式，请在perl代码中增加适合该条目正则表达式!',"\n";
 			}
 			
 			print 'journal =',$journal,"\n";
@@ -427,6 +433,7 @@ foreach $reference(@references){
 				if($flagmatched==0){
 				print 'the text after title was not matched, please add a regex for the current entry in the perl source code!',"\n";
 				print '当前条目标题之后的内容没有匹配的正则表达式，请在perl代码中增加适合该条目正则表达式!',"\n";
+				print FHL "$reference",'当前条目标题之后的内容没有匹配的正则表达式，请在perl代码中增加适合该条目正则表达式!',"\n";
 				}
 			}else{
 				$regexformach='\[N\]';
@@ -1752,6 +1759,6 @@ foreach $reference(@references){
 	}
 
 
-	
+close (FHL);
 close (FHR);
 close (FHW);

@@ -83,7 +83,10 @@ class article:
                 print("ppl check text ppllist len equal")
             else:
                 print("ppl check text ppllist len not equal!")
-
+        print('ppl_check_in '+self.name)
+        for i,j in zip(self.ppllist,self.sents):
+            if i>50:
+                print(i,j)
         #ppl 分布计算和画图
         y=[0,0,0,0,0,0,0,0]
         for i in self.ppllist:
@@ -310,32 +313,25 @@ class article:
             ref.setkey(key)
             if key == None:
                 fail.append(ref.text)
-        if 1==1:
+        if config.config.ref_write_file_on ==1:
             filepath = r'D:\PyProject\docx_input\data_cache\refs\\' + self.name + '.txt'
             for ref in self.refs:
                 if ref.key!=None:
                     with open(filepath,'a',encoding='utf-8') as f:  # 打开文件
                     # try:
                         print(ref.text, file=f)
-                # except UnicodeEncodeError:
-                #     er_unicode.append(ref.text)
-                #     print(ref.text.encode('gbk','ignore').decode('gbk'), file=f)
+        if config.config.refs_parse_cache_on ==0:
+            in_path=r'D:\PyProject\docx_input\data_cache\refs\\' + self.name + '.txt'
+            out_path=r'D:\PyProject\docx_input\data_cache\refs_bibtex\\' + self.name + '.bib'
+            log_path=r'D:\PyProject\docx_input\data_cache\refs_log\\' + self.name + '.txt'
+            os.system('perl "d:\PyProject\docx_input\gb7714\gb7714texttobib.pl" '
+                      'in='+in_path+
+                      ' out='+out_path+
+                      ' log='+log_path)
+            with open(r'D:\PyProject\docx_input\data_cache\refs_fail\\' + self.name + '_nokey.txt', 'w', encoding='utf-8') as f:  # 打开文件
+                # try:
+                print(fail, file=f)
 
-        in_path=r'D:\PyProject\docx_input\data_cache\refs\\' + self.name + '.txt'
-        out_path=r'D:\PyProject\docx_input\data_cache\refs_bibtex\\' + self.name + '.bib'
-        os.system('perl "d:\PyProject\docx_input\gb7714\gb7714texttobib.pl" in='+in_path+' out='+out_path)
-
-
-
-        with open(r'D:\PyProject\docx_input\data_cache\refs_fail\\' + self.name + '_nokey.txt', 'w', encoding='utf-8') as f:  # 打开文件
-            # try:
-            print(fail, file=f)
-        #     if y==True:
-        #         pass
-        #     else:
-        #         print('error in ',self.name,' ',ref.text)
-        #         pass
-        # print(refs)
 
 
 
