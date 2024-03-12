@@ -1,6 +1,9 @@
 import argparse
 import re
 from collections import defaultdict
+import bibtexparser
+from bert_embedding.bert_emb import calc_similarity
+
 
 class reference:
 
@@ -8,6 +11,8 @@ class reference:
         self.article=article
         self.index=index
         self.text=text
+        self.context=[]
+        self.no_key=False
 
     def setkey(self,key):
         self.key=key
@@ -80,7 +85,8 @@ class reference:
                   'author.title[usera].address,year.'],
             'C': ['author.title.edition[usera].location:publisher,year:pages.'],
             'P': ['author.title.edition[usera].location:publisher,year:pages.',
-                  'author.title.edition[usera].date.']
+                  'author.title.edition[usera].date.'],
+            'Z':['author.title[usera].translator,year,volume(number):pages[urldate].url.doi.']
         }
         entrytypes = {
             'M': 'book',
@@ -194,5 +200,21 @@ class reference:
                 print('\t', i)
 
         return parsed_dict!=None
-    def setcontext(self,text):
-        self.context=text
+    def addcontext(self, context):
+        self.context.append(context)
+    def getcontext(self):
+        return self.context
+    def text_context_sim(self,title):
+        res=[]
+        for i in self.context:
+            res.append(calc_similarity(title,i))
+        return res
+
+            # 获取文章的作者
+            # 获取文章的发表年份
+            # print(title)
+        # if not self.no_key:
+        #     print(self.article.refs_entries[self.index-1])
+
+        # print(bib_database.entries)
+

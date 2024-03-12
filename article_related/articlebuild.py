@@ -37,7 +37,8 @@ def article_build():
         a.tosents()#生成句子（如果已有，则直接读取填充）
         a.calppl()#计算ppl，如果已经计算，则直接填充
         a.cal_sents_sim()#计算句子上下句相似度，如果已经计算，则直接填充
-        a.getref()
+        a.setref()
+        a.setcite()
     return articlelist
 bgtime=time.time()
 articlelist=article_build()

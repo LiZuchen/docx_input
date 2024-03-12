@@ -9,8 +9,11 @@ import seaborn
 import sns as sns
 from article_related.reference import reference
 from bert_embedding.bert_emb import cal_ppl_bygpt2, cal_sim_bybert
+from bibtexparser.bparser import BibTexParser
+from bibtexparser.customization import convert_to_unicode
 from draw.task1_draw import pplnum_drawbar
 import pickle
+import bibtexparser
 from sympy import stats
 import matplotlib.pyplot as plt
 
@@ -84,9 +87,10 @@ class article:
             else:
                 print("ppl check text ppllist len not equal!")
         print('ppl_check_in '+self.name)
-        for i,j in zip(self.ppllist,self.sents):
-            if i>50:
-                print(i,j)
+        if config.config.ppl_show_in_console:
+            for i,j in zip(self.ppllist,self.sents):
+                if i>50:
+                    print(i,j)
         #ppl 分布计算和画图
         y=[0,0,0,0,0,0,0,0]
         for i in self.ppllist:
@@ -281,8 +285,9 @@ class article:
         if config.config.task1_3_draw_on:
             draw.task1_draw.draw_x_y_distribution(paragraphslennum,paragraphslens,self.name)
 
-
     def getref(self):
+        return self.refs
+    def setref(self):
         c=0
         b=0
         refs=[]
@@ -300,6 +305,7 @@ class article:
                 refs.append(refi)
                 c+=1
         self.refs = refs
+
         if self.refs[0].text[0] != '[':
             x=1
             for i in self.refs:
@@ -313,6 +319,7 @@ class article:
             ref.setkey(key)
             if key == None:
                 fail.append(ref.text)
+                ref.no_key=True
         if config.config.ref_write_file_on ==1:
             filepath = r'D:\PyProject\docx_input\data_cache\refs\\' + self.name + '.txt'
             for ref in self.refs:
@@ -331,9 +338,79 @@ class article:
             with open(r'D:\PyProject\docx_input\data_cache\refs_fail\\' + self.name + '_nokey.txt', 'w', encoding='utf-8') as f:  # 打开文件
                 # try:
                 print(fail, file=f)
+        bibpath=r'D:\PyProject\docx_input\data_cache\refs_bibtex\\' + self.name + '.bib'
+        with open(bibpath,encoding='UTF-8',errors='ignore') as bibtex_file:
+            parser = BibTexParser(ignore_nonstandard_types=True)  # 声明解析器类
+            parser.customization = convert_to_unicode  # 将BibTeX编码强制转换为UTF编码
+            bibdata = bibtexparser.load(bibtex_file, parser=parser)  # 通过bp.load()加载
+        self.refs_entries=bibdata.entries
+        self.ref_titles=[]
+        for entry in self.refs_entries:
+            # 获取文章的标题
+            try:
+                self.ref_titles.append(entry['title'])
+            # 获取文章的作者
+            except KeyError:
+                print(entry)
+            # 获取文章的发表年份
 
+    # print(bib_database.entries)
 
+        return self.refs
 
+    def show_ref_cite(self):
+        for i in self.refs:
+            print(i.text)
+            for c in i.getcontext():
+                print(c)
+    def setcite(self):
+        for i in self.sents:
+            #每一句
+            if i[0]!='[':#不是参考文献
+                res=re.findall(r'\[[ 0-9]+]',i)#提取句中引用编号
 
+                if len(res)>0:
+                    itero=[]
+                    for j in res:#对每一个句中的引用编号查找该编号对应的参考文献--->self.refs[int(j[1:-1]) - 1]
+                        if ' ' in j:
+                            for k in list(filter(None,re.split(' |\[|]',j))):
+                                # print(k)
+                                itero.append(int(k))
+                        else:
+                            itero.append(int(j[1:-1]))
+                    itero=list(set(itero))
+                    for l in itero:
+                        if self.refs[l - 1].index!=l or l - 1<0:
+                            pass
+                            # print(l - 1)
+                            # print('ref_getcite_check error!',self.name)
+                            # print('----------------------------------')
+                            # print(self.refs[l - 1].text)
+                            # print(i)
+                            # print(self.refs[l - 1].index)  # index为引用序号
+                            # print('----------------------------------')
+                        else:
+                            # if len(self.refs[l - 1].getcontext())==0:
+                            #     print('first context:')
+                            #
+                            # else:
+                            #     print('more context!')
+                            #
+                            # print(i)
+                            self.refs[l- 1].addcontext(i)
+        # self.show_ref_cite()
+        self.ref_cite_check()
+    def ref_cite_check(self):
 
+        sim=[]
+        i=0
+        for ref in self.refs:
+            if ref.no_key:
+                print(ref.text)
+            else:
+                print(ref.text)
+                print(self.ref_titles[i])
+                sim.append(ref.text_context_sim(self.ref_titles[i]))
+                i += 1
+        print(sim)
 

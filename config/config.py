@@ -21,6 +21,7 @@ sents_sim_check_on=0
 paragraphs_statistics_show_on=0
 sentences_statistics_show_on=0
 task1_3_draw_on=0
+ppl_show_in_console=0
 
 
 #--------------------------task2--------------------------#

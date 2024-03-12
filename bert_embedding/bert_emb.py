@@ -309,4 +309,4 @@ def readgpt_gen():
                 sents.append(j+'。')
     print(len(sents))
     cal_ppl_bygpt2_4gpt_gen(sents,name)
-readgpt_gen()
+# readgpt_gen()
