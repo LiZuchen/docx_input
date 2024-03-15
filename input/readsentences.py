@@ -7,7 +7,7 @@ from config.config import readpathdir
 from docx import Document
 import config
 def zyout(path,text):
-    with open(path, 'w') as f:
+    with open(path, 'w',encoding='utf-8') as f:
         print(text,file=f)
 # -----------------------例文打印-------------------------
 def sampleshow():
