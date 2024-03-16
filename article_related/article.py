@@ -360,10 +360,21 @@ class article:
         return self.refs
 
     def setref_date(self):
+        ref_date=[]
         for entry in self.refs_entries:
             if 'date'in entry.keys():
                 if entry['date'] != None and entry['title'] != None:
-                    print(entry['date'],entry['title'])
+                    try:
+                        year=int(entry['date'][:4])
+                        if year>2024 or year<1900:
+                            print('date error in',entry['title'],self.name)
+                        ref_date.append(int(entry['date'][:4]))
+                    except ValueError:
+                        print(entry['date'][:4])
+
+        ref_date.sort()
+        print(ref_date)
+
     def show_ref_cite(self):
         for i in self.refs:
             print(i.text)
