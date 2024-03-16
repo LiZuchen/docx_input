@@ -353,11 +353,17 @@ class article:
             except KeyError:
                 print(entry)
             # 获取文章的发表年份
-
+        self.setref_date()
     # print(bib_database.entries)
+        self.setcite()
 
         return self.refs
 
+    def setref_date(self):
+        for entry in self.refs_entries:
+            if 'date'in entry.keys():
+                if entry['date'] != None and entry['title'] != None:
+                    print(entry['date'],entry['title'])
     def show_ref_cite(self):
         for i in self.refs:
             print(i.text)
@@ -399,7 +405,7 @@ class article:
                             # print(i)
                             self.refs[l- 1].addcontext(i)
         # self.show_ref_cite()
-        self.ref_cite_check()
+        # self.ref_cite_check()
     def ref_cite_check(self):
 
         sim=[]
