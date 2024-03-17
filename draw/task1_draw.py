@@ -49,3 +49,44 @@ def draw_x_y_distribution(x,y,name):
     figpath = 'D:\PyProject\docx_input\data_cache\paragraphs_distribution'
     plt.savefig(figpath + '\\' + name +'paragraphs__distribution_figure' +'.png')
     # plt.show()
+
+def tmp():
+    matplotlib.use('TkAgg')
+    x=[1,2,3,4,5,6,7,8,9,10]
+    y1=[1055.43,1213.67,1208.42,1211.61 ,1207.69,1182.04,1171.39,630.28,643.06,663.76]
+    y2=[159.09,315.44 ,470.71 ,484.96 ,497.23 ,470.88 ,461.04 ,470.93 ,463.38 ,474.23]
+    y3=[ 265.42 ,316.89 ,316.77,317.89,343.91,337.73,312.40 ,315.34 ,333.13 ,321.91 ]
+    fig, ax = plt.subplots(dpi=100, figsize=(10, 10))
+    ax.plot(x,y3)
+
+    plt.xlabel('并行数量',fontproperties="STSong")
+    plt.ylabel('RPS',fontproperties="STSong")
+    plt.show()
+
+
+def refdate_dis_drawbar(data,name):
+    #data-->dict
+    matplotlib.use('TkAgg')
+    n=len(data)
+    x=[]
+    y=[]
+    for i in sorted(data.keys()):
+        x.append(i)
+        y.append(data[i])
+
+    # plt.xticks(x, x_label)#绘制x刻度标签
+    # plt.bar(x, y,width=[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],bottom=0,color=color)#绘制y刻度标签
+    # plt.legend()
+    # plt.grid(True, linestyle=':', color='r', alpha=0.6)
+    # plt.show()
+
+    fig, ax = plt.subplots(dpi=200,figsize=(30,10))
+    ax.bar(x, y)
+    ax.set_xticks(x)
+    plt.tick_params(labelsize=10)
+    plt.title(name+'参考文献年份分布',fontproperties="STSong",fontsize=40)
+    ax.yaxis.set_major_locator(MultipleLocator(1))
+    figpath=r'D:\PyProject\docx_input\data_cache\refdate_distribution_figure'
+    plt.savefig(figpath+'\\'+name+'.png')
+    # plt.show()
+    plt.close()

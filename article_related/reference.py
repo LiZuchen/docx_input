@@ -13,6 +13,7 @@ class reference:
         self.text=text
         self.context=[]
         self.no_key=False
+        self.date=None
 
     def setkey(self,key):
         self.key=key

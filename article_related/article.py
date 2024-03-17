@@ -361,20 +361,84 @@ class article:
 
     def setref_date(self):
         ref_date=[]
+
+        indexj=0
         for entry in self.refs_entries:
             if 'date'in entry.keys():
-                if entry['date'] != None and entry['title'] != None:
+                if  entry['title'] != None:
                     try:
-                        year=int(entry['date'][:4])
+                        year=int(entry['date'][:4].replace(" ",""))
                         if year>2024 or year<1900:
                             print('date error in',entry['title'],self.name)
-                        ref_date.append(int(entry['date'][:4]))
+                        else:
+                            ref_date.append(year)
+                            # while self.refs[indexj].no_key==True :
+                            #     indexj+=1
+
+                                #self.refs
+                                #index为bibetex的索引号
+                            # self.refs[indexj].date = year
+                            # print(self.refs[indexj].date, self.refs[indexj].text)
+                            # indexj+=1
                     except ValueError:
                         print(entry['date'][:4])
-
+            else:
+                indexj += 1
         ref_date.sort()
+        self.ref_date_statistic(ref_date)
         print(ref_date)
+    def ref_date_statistic(self,dates):
+        dlf=[]
 
+        c=0
+        for i in self.refs:
+            # print(i)
+            dl = []
+            for si in re.findall('[0-9]+',i.text):
+                if int(si)>1920 and int(si)<2025:
+                   dl.append(int(si))
+            ds=set(dl)
+            if len(ds)==1:
+                if i.date!=None:
+                    if i.date in ds:
+                        dlf.append(i.date)
+                    else:
+                        print('find not the same date record in .date')
+                        print(i.date,print(ds))
+                else:
+                    i.date=list(ds)[0]
+                    dlf.append(i.date)
+
+            elif len(ds)==0:
+                #ref没有date
+                pass
+            else:
+                print('存在两个以上的日期，ds = ',ds,end=' ')
+                if i.date in ds:
+                    print('能找到一个')
+                    dlf.append(i.date)
+                else:
+                    print('error in find only year，存在多个可能日期,不进行统计')
+                    print(i.date,i.text)
+
+        dlf.sort()
+        if c==1:
+            earliest=dates[0]
+            latest=dates[-1]
+            average=sum(dates)/len((dates))
+            dateset=set(dates)
+            datedict={}
+            for d in dateset:
+                datedict[d]=dates.count(d)
+            print(datedict)
+            draw.task1_draw.refdate_dis_drawbar(datedict, self.name)
+        else:
+            datedict = {}
+            for d in set(dlf):
+                datedict[d] = dlf.count(d)
+            print(datedict)
+            draw.task1_draw.refdate_dis_drawbar(datedict, self.name)
+        return
     def show_ref_cite(self):
         for i in self.refs:
             print(i.text)
