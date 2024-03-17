@@ -433,10 +433,13 @@ class article:
             print(datedict)
             draw.task1_draw.refdate_dis_drawbar(datedict, self.name)
         else:
+            earliest = dlf[0]
+            latest = dlf[-1]
+            average = sum(dlf) / len((dlf))
             datedict = {}
             for d in set(dlf):
                 datedict[d] = dlf.count(d)
-            print(datedict)
+            print(datedict,'f:',earliest,'l:',latest,'a:',average)
             draw.task1_draw.refdate_dis_drawbar(datedict, self.name)
         return
     def show_ref_cite(self):
