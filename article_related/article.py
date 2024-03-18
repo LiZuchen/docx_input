@@ -433,8 +433,8 @@ class article:
             print(datedict)
             draw.task1_draw.refdate_dis_drawbar(datedict, self.name)
         else:
-            earliest = dlf[0]
-            latest = dlf[-1]
+            earliest = dlf[0]#最久远的参考文献
+            latest = dlf[-1]#最近的参考文献
             average = sum(dlf) / len((dlf))
             datedict = {}
             for d in set(dlf):
