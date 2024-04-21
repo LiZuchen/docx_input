@@ -254,6 +254,11 @@ class article:
             print('句长',sentslen)
         self.average_sentence_length=average_sentence_length
         self.sentslen=sentslen
+        save=[average_sentence_length,sentslen]
+        with open ('D:\PyProject\docx_input\data_cache\sents_para_save\\'+self.name+'_s_save.txt','w') as f:
+            print(save,file=f)
+        f.close()
+
     def paragraphs_statistics(self):
         #平均段内句子数
         average_sentsnum_per_paragraph=0
@@ -282,6 +287,10 @@ class article:
         self.average_wordssnum_per_paragraph=average_wordssnum_per_paragraph
         self.paragraphslennum=paragraphslennum
         self.paragraphslens=paragraphslens
+        save=[average_sentsnum_per_paragraph,average_wordssnum_per_paragraph,paragraphslennum,paragraphslens]
+        with open ('D:\PyProject\docx_input\data_cache\sents_para_save\\'+self.name+'_p_save.txt','w') as f:
+            print(save,file=f)
+        f.close()
         if config.config.task1_3_draw_on:
             draw.task1_draw.draw_x_y_distribution(paragraphslennum,paragraphslens,self.name)
 

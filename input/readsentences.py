@@ -46,7 +46,7 @@ def catalogue_get(doc):
 # catalogue_get(doc)
 #目录提取
 def menuout(path,text):
-    with open(path, 'w') as f:
+    with open(path, 'w',encoding='utf-8') as f:
         print(text,file=f)
 def menuextract(paragraphs,a):
     menu_console_out=0

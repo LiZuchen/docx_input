@@ -38,13 +38,18 @@ def rws(paragraphs,name):
     for paragraph in paragraphs:
         # print(i)
         # i += 1
-        rws1 = cut("Ⅰ、毕业设计（论文）题目：", "Ⅱ、毕业设计（论文）使用的原始资料（数据）及设计技术要求：",
+        rws1 = cut("Ⅰ、毕业设计（论文）题目：",
+                   "Ⅱ、毕业设计（论文）使用的原始资料（数据）及设计技术要求：",
                    paragraph.text, rws1out, rws1)
-        rws2 = cut("Ⅱ、毕业设计（论文）使用的原始资料（数据）及设计技术要求：", "Ⅲ、毕业设计（论文）工作内容：",
+        rws2 = cut("Ⅱ、毕业设计（论文）使用的原始资料（数据）及设计技术要求：",
+                   "Ⅲ、毕业设计（论文）工作内容：",
                    paragraph.text, rws2out, rws2)
-        rws3 = cut("Ⅲ、毕业设计（论文）工作内容：", "Ⅳ、主要参考资料：",
+        rws3 = cut("Ⅲ、毕业设计（论文）工作内容：",
+                   "Ⅳ、主要参考资料：",
                    paragraph.text, rws3out, rws3)
-        rws4 = cut("Ⅳ、主要参考资料：", "我声明，本论文及其研究工作是由本人在导师指导下独立完成的，在完成论文时所利用的一切资料均已在参考文献中列出。",
+        rws4 = cut("Ⅳ、主要参考资料：",
+                   "我声明，本论文及其研究工作是由本人在导师指导下独立完成的，"
+                   "在完成论文时所利用的一切资料均已在参考文献中列出。",
                    paragraph.text, rws4out, rws4)
     rwslist=[]
     rwslist.append(list(filter(None,rws1out)))#题目
