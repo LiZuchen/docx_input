@@ -28,7 +28,7 @@ MODEL_EN = GPT2LMHeadModel.from_pretrained(NAME_EN)
 NAME_ZH = 'D:\PyProject\docx_input\chatgpt_check\model\Wenzhong-GPT2-110M'
 TOKENIZER_ZH = GPT2Tokenizer.from_pretrained(NAME_ZH)
 MODEL_ZH = GPT2LMHeadModel.from_pretrained(NAME_ZH)
-
+name='16021088_张文煊_基于实体链接和关系抽取的文本知识提取算法研究（最终版）'
 
 # code borrowed from https://github.com/blmoistawinde/HarvestText
 def sent_cut_zh(para: str) -> List[str]:
@@ -175,17 +175,22 @@ with gr.Blocks() as demo:
             注意: 在`文本`栏中输入更多的文本，可以让预测更准确哦！
             """
         )
+        with open('D:\PyProject\docx_input\\file\\txt\\'+name+'.txt','r',encoding='utf-8') as f:
+            content=f.read()
+        f.close()
         a2 = gr.Textbox(
             lines=5, label='文本',
-            value="对于OpenAI大力出奇迹的工作，自然每个人都有自己的看点。我自己最欣赏的地方是ChatGPT如何解决 “AI校正(Alignment)“这个问题。这个问题也是我们课题组这两年在探索的学术问题之一。"
+            value=content
         )
         button2 = gr.Button("🤖 预测!")
         gr.Markdown("GLTR (中文测试集准确率 86.39%)")
         label2_gltr = gr.Textbox(lines=1, label='预测结果 🎃')
         score2_gltr = gr.Textbox(lines=1, label='模型概率')
+
         gr.Markdown("PPL (中文测试集准确率 59.04%, 持续优化中...)")
         label2_ppl = gr.Textbox(lines=1, label='PPL 预测结果 🎃')
         score2_ppl = gr.Textbox(lines=1, label='PPL 模型概率')
+
 
     with gr.Tab("English"):
         gr.Markdown(
@@ -215,10 +220,18 @@ with gr.Blocks() as demo:
     button1.click(predict_en, inputs=[a1], outputs=[label1_gltr, score1_gltr, label1_ppl, score1_ppl])
     button2.click(predict_zh, inputs=[a2], outputs=[label2_gltr, score2_gltr, label2_ppl, score2_ppl])
 
+
+
     # Page Count
     gr.Markdown("""
                 <center><a href="https://clustrmaps.com/site/1bsdd" title="Visit tracker"><img src="//clustrmaps.com/map_v2.png?cl=080808&w=a&t=tt&d=NvxUHBTxY0ECXEuebgz8Ym8ynpVtduq59ENXoQpFh74&co=ffffff&ct=808080"/></a></center>
                 """)
+
 matplotlib.use('TkAgg')
 demo.launch()
+
+
+# with open('D:\PyProject\docx_input\data_cache\\aicheck\\' + name + '_ai.txt', 'w') as f:
+#     print([label2_gltr, score2_gltr, label2_ppl, score2_ppl], file=f)
+# f.close()
 # To create a public link, set `share=True` in `launch()`.

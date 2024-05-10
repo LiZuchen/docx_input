@@ -85,7 +85,7 @@ def zykeywordextract(paragraphs,article):
             # print(xi[0])
             # print(xi[1])
             fzyi = pi
-        if len(xi)>=1and len(xi[0]) >= 3 and xi[0][0:3] == '关键词':
+        if len(xi)>=1and len(xi[0]) >= 3 and ('关键词' in xi[0] or '关键字' in xi[0]):
             # print(xi[0])
             break
     zytext=[]

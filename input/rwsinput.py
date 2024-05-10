@@ -23,7 +23,7 @@ def rws4clean(rws4out):
             rws4c.append(i)
     return rws4c
 def rwsout(path,outlist):
-    with open(path, 'w') as f:
+    with open(path, 'w',encoding='utf-8') as f:
         print(outlist,file=f)
 def rws(paragraphs,name):
     i = 0

@@ -163,10 +163,10 @@ def embedding():
       print(out.last_hidden_state.data)
       print(out.last_hidden_state.shape)
 def cal_ppl():
-    model = BertForMaskedLM.from_pretrained('bert-base-chinese')
+    model = BertForMaskedLM.from_pretrained(r'D:\PyProject\bert_chinese\bert-base-chinese')
     model.eval()
     # Load pre-trained model tokenizer (vocabulary)
-    tokenizer = BertTokenizer.from_pretrained('bert-base-chinese')
+    tokenizer = BertTokenizer.from_pretrained(r'D:\PyProject\bert_chinese\bert-base-chinese')
     sentence = "我不会忘记和你一起奋斗的时光。"
     tokenize_input = tokenizer.tokenize(sentence)
     tensor_input = torch.tensor([tokenizer.convert_tokens_to_ids(tokenize_input)])
@@ -222,8 +222,8 @@ import numpy as np
 # 定义计算相似度的函数
 def calc_similarity(s1, s2):
     # 对句子进行分词，并添加特殊标记
-    tokenizer = AutoTokenizer.from_pretrained("bert-base-chinese")
-    model = AutoModel.from_pretrained("bert-base-chinese")
+    tokenizer = AutoTokenizer.from_pretrained(r'D:\PyProject\bert_chinese\bert-base-chinese')
+    model = AutoModel.from_pretrained(r'D:\PyProject\bert_chinese\bert-base-chinese')
     inputs = tokenizer([s1, s2], return_tensors='pt', padding=True, truncation=True)
 
     # 将输入传递给BERT模型，并获取输出
@@ -248,10 +248,11 @@ def cal_sim_bybert(sentswithlabel,name):
                 sentssim.append([sentswithlabel[key][i],sentswithlabel[key][j],calc_similarity(sentswithlabel[key][i],sentswithlabel[key][j])])
                     # print(sentssim[-1],sentswithlabel[key][i],sentswithlabel[key][j])
     # print(sentssim[-1], sentswithlabel[key][i], sentswithlabel[key][j])
-    # sentssimpath = r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\'
-    # with open(sentssimpath + name + '.txt', 'w') as f:
-    #     print(sentssim, file=f)
-    print(2)
+    sentssimpath = r'D:\PyProject\docx_input\data_cache\sents_sim_cache\\'
+    with open(sentssimpath + name + '.txt', 'w',encoding='utf-8') as f:
+        print(sentssim, file=f)
+    f.close()
+
     sents1=[]
     sents2=[]
     sim=[]
